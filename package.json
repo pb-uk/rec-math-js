@@ -1,0 +1,47 @@
+{
+  "name": "boilerplate-module",
+  "version": "0.1.4",
+  "description": "Boilerplate for a JavaScript module (browser + node).",
+  "keywords": [
+    "boilerplate"
+  ],
+  "homepage": "https://github.com/user/repo",
+  "bugs": "https://github.com/user/repo/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:user/repo.git"
+  },
+  "author": "My Name (http://github.com/user)",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/boilerplate-module.min.js",
+  "scripts": {
+    "build": "npm run lint:fix && npm run build:build",
+    "build:build": "rollup -c",
+    "ci": "npm run lint && npm run build:build && npm run test:ci",
+    "lint": "eslint . && prettier . --check",
+    "lint:fix": "eslint . --fix && prettier . --write",
+    "test": "jest test --verbose",
+    "test:ci": "npm run test",
+    "test:coverage": "jest test/unit --coverage",
+    "test:func": "jest test/functional --verbose",
+    "test:unit": "jest test/unit --verbose"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "jest": "^27.2.0",
+    "prettier": "^2.4.0",
+    "rollup": "^2.56.3",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^20.0.0"
+  }
+}

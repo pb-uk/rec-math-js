@@ -1,0 +1,7 @@
+# .prettierignore
+
+# Distribution files.
+/dist/
+
+# Test reports.
+/coverage/
