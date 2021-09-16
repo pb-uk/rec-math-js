@@ -28,8 +28,10 @@ if (rmSync) {
 // Human timestamp for banner.
 const datetime = new Date().toISOString().substring(0, 19).replace('T', ' ');
 
+const pkgName = pkg.name.replace(/@.*\//, '');
+
 // Main banner.
-const banner = `/*! ${pkg.name} v${pkg.version} ${datetime}
+const banner = `/*! ${pkgName} v${pkg.version} ${datetime}
  *  ${pkg.homepage}
  *  Copyright ${pkg.author} ${pkg.license} license.
  */
@@ -39,7 +41,7 @@ const banner = `/*! ${pkg.name} v${pkg.version} ${datetime}
 const main = {
   input: 'src/index.js',
   file: 'index',
-  name: camelCase(pkg.name, { pascalCase: true }),
+  name: camelCase(pkgName, { pascalCase: true }),
   banner,
 };
 
@@ -49,10 +51,10 @@ const modules = [
 ];
 
 // Sub-module banner.
-const getBanner = ({ file, name }) => `/*! ${pkg.name}/${file} v${
+const getBanner = ({ file, name }) => `/*! ${pkgName}/${file} v${
   pkg.version
 } ${datetime}
- *  ${camelCase(pkg.name, { pascalCase: true })} ${name} module
+ *  ${camelCase(pkgName, { pascalCase: true })} ${name} module
  *  ${pkg.homepage}
  *  Copyright ${pkg.author} ${pkg.license} license.
  */
@@ -136,7 +138,7 @@ const getCjsConfig = ({ input, file, name, banner }) => ({
 });
 
 const build = [
-  getBrowserConfig({ ...main, file: pkg.name }),
+  getBrowserConfig({ ...main, file: pkgName }),
   getEsConfig(main),
   getCjsConfig(main),
 ];

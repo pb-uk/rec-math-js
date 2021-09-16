@@ -10,7 +10,7 @@ in `rollup.config.js` and run `npm run build` to change this).
 Load the script from the CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/rec-math@1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pbuk/rec-math@1"></script>
 ```
 
 The module is exported as `RecMath`:
@@ -28,7 +28,7 @@ Node >= 12 is currently supported in the distributed modules.
 Install from `npm`:
 
 ```console
-$ npm i rec-math
+$ npm i @pbuk/rec-math
 ```
 
 Require CommonJS module:

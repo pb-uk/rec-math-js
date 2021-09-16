@@ -1,6 +1,6 @@
 {
-  "name": "rec-math",
-  "version": "0.0.0",
+  "name": "@pbuk/rec-math",
+  "version": "0.0.1",
   "description": "Recreational mathemetics including games and puzzle solvers",
   "keywords": [
     "recreational",
@@ -27,6 +27,7 @@
     "ci": "npm run lint && npm run build:build && npm run test:ci",
     "lint": "eslint . && prettier . --check",
     "lint:fix": "eslint . --fix && prettier . --write",
+    "publish": "npm run build && npm run test && npm publish --access=public",
     "test": "jest test --verbose",
     "test:ci": "npm run test",
     "test:coverage": "jest test/unit --coverage",
