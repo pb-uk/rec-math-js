@@ -21,7 +21,9 @@ const node = '12'; // Until EOL 2022-04-30
 const targets = '>0.25%, not dead, not IE 11, Firefox ESR';
 
 // Delete existing files.
-rmSync('dist', { recursive: true, force: true });
+if (rmSync) {
+  rmSync('dist', { recursive: true, force: true });
+}
 
 // Human timestamp for banner.
 const datetime = new Date().toISOString().substring(0, 19).replace('T', ' ');
