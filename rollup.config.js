@@ -1,4 +1,5 @@
 // rollup.config.js
+import { rmSync } from 'fs';
 
 import camelCase from 'camelcase';
 import babel from '@rollup/plugin-babel';
@@ -19,18 +20,37 @@ const node = '12'; // Until EOL 2022-04-30
 // Browserslist target for Browser and ES module build.
 const targets = '>0.25%, not dead, not IE 11, Firefox ESR';
 
-// External modules.
-const external = []; // e.g. ['axios'];
-const globals = {}; // e.g { axios: 'axios' };
-
-// Entry file(s) for build.
-const input = ['src/index.js'];
+// Delete existing files.
+rmSync('dist', { recursive: true, force: true });
 
 // Human timestamp for banner.
 const datetime = new Date().toISOString().substring(0, 19).replace('T', ' ');
 
-// Banner.
+// Main banner.
 const banner = `/*! ${pkg.name} v${pkg.version} ${datetime}
+ *  ${pkg.homepage}
+ *  Copyright ${pkg.author} ${pkg.license} license.
+ */
+`;
+
+// Configure main build.
+const main = {
+  input: 'src/index.js',
+  file: 'index',
+  name: camelCase(pkg.name, { pascalCase: true }),
+  banner,
+};
+
+// Modules to build.
+const modules = [
+  // ['games/', 'mastermind', 'index.js']
+];
+
+// Sub-module banner.
+const getBanner = ({ file, name }) => `/*! ${pkg.name}/${file} v${
+  pkg.version
+} ${datetime}
+ *  ${camelCase(pkg.name, { pascalCase: true })} ${name} module
  *  ${pkg.homepage}
  *  Copyright ${pkg.author} ${pkg.license} license.
  */
@@ -42,79 +62,95 @@ const plugins = [
   json(),
 ];
 
-export default [
+const getBrowserConfig = ({ input, file, name, banner }) => ({
   // browser-friendly iife build
-  {
-    input,
-    external,
-    output: [
-      {
-        banner,
-        name: camelCase(pkg.name, { pascalCase: true }),
-        file: pkg.browser,
-        format: 'iife',
-        esModule: false,
-        sourcemap: true,
-        globals,
-      },
-    ],
-    plugins: [
-      ...plugins,
+  input,
+  output: [
+    {
+      banner: banner || getBanner({ file, name }),
+      name,
+      file: `dist/${file}.min.js`,
+      format: 'iife',
+      esModule: false,
+      sourcemap: true,
+    },
+  ],
+  plugins: [
+    ...plugins,
 
-      babel({
-        babelHelpers: 'bundled',
-        presets: [['@babel/preset-env', { targets }]],
-        exclude: 'node_modules/**',
-      }),
+    babel({
+      babelHelpers: 'bundled',
+      presets: [['@babel/preset-env', { targets }]],
+      exclude: 'node_modules/**',
+    }),
 
-      terser(),
-    ],
-  },
+    terser(),
+  ],
+});
 
+const getEsConfig = ({ input, file, name, banner }) => ({
   // ES module (for bundlers) build.
-  {
-    input,
-    external,
-    output: [
-      {
-        banner,
-        file: pkg.module,
-        format: 'es',
-        sourcemap: true,
-      },
-    ],
-    plugins: [
-      ...plugins,
+  input,
+  output: [
+    {
+      banner: banner || getBanner({ file, name }),
+      file: `dist/esm/${file}.js`,
+      format: 'es',
+      sourcemap: true,
+    },
+  ],
+  plugins: [
+    ...plugins,
 
-      babel({
-        babelHelpers: 'bundled',
-        presets: [['@babel/preset-env', { targets }]],
-        exclude: 'node_modules/**',
-      }),
-    ],
-  },
+    babel({
+      babelHelpers: 'bundled',
+      presets: [['@babel/preset-env', { targets }]],
+      exclude: 'node_modules/**',
+    }),
+  ],
+});
 
+const getCjsConfig = ({ input, file, name, banner }) => ({
   // CommonJS (for Node) build.
-  {
-    input,
-    external,
-    output: [
-      {
-        banner,
-        file: pkg.main,
-        format: 'cjs',
-        sourcemap: true,
-        esModule: false,
-      },
-    ],
-    plugins: [
-      ...plugins,
+  input,
+  output: [
+    {
+      banner: banner || getBanner({ file, name }),
+      file: `dist/cjs/${file}.js`,
+      format: 'cjs',
+      sourcemap: true,
+      esModule: false,
+    },
+  ],
+  plugins: [
+    ...plugins,
 
-      babel({
-        babelHelpers: 'bundled',
-        presets: [['@babel/preset-env', { targets: { node } }]],
-        exclude: 'node_modules/**',
-      }),
-    ],
-  },
+    babel({
+      babelHelpers: 'bundled',
+      presets: [['@babel/preset-env', { targets: { node } }]],
+      exclude: 'node_modules/**',
+    }),
+  ],
+});
+
+const build = [
+  getBrowserConfig({ ...main, file: pkg.name }),
+  getEsConfig(main),
+  getCjsConfig(main),
 ];
+
+modules.forEach(([path, name, file]) => {
+  const module = {
+    input: `src/${path}${name}/${file}`,
+    file: `${path}${name}`,
+    name: camelCase(name, { pascalCase: true }),
+  };
+
+  build.push(
+    getBrowserConfig(module),
+    getEsConfig(module),
+    getCjsConfig(module)
+  );
+});
+
+export default build;

@@ -1,21 +1,26 @@
 {
-  "name": "boilerplate-module",
-  "version": "0.1.4",
-  "description": "Boilerplate for a JavaScript module (browser + node).",
+  "name": "rec-math",
+  "version": "0.0.0",
+  "description": "Recreational mathemetics including games and puzzle solvers",
   "keywords": [
-    "boilerplate"
+    "recreational",
+    "mathematics",
+    "math",
+    "game",
+    "puzzle",
+    "solver"
   ],
-  "homepage": "https://github.com/user/repo",
-  "bugs": "https://github.com/user/repo/issues",
+  "homepage": "https://github.com/pbuk-uk/rec-math-js",
+  "bugs": "https://github.com/pbuk-uk/rec-math-js/issues",
   "repository": {
     "type": "git",
-    "url": "git@github.com:user/repo.git"
+    "url": "git@github.com:pbuk-uk/rec-math-js.git"
   },
-  "author": "My Name (http://github.com/user)",
+  "author": "pbuk (http://github.com/pbuk-uk)",
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "browser": "dist/boilerplate-module.min.js",
+  "browser": "dist/rec-math.min.js",
   "scripts": {
     "build": "npm run lint:fix && npm run build:build",
     "build:build": "rollup -c",
@@ -32,6 +37,7 @@
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "eslint": "^7.32.0",
@@ -40,8 +46,5 @@
     "prettier": "^2.4.0",
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "^7.0.2"
-  },
-  "dependencies": {
-    "@rollup/plugin-commonjs": "^20.0.0"
   }
 }

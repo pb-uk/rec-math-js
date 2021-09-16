@@ -1,6 +1,6 @@
-# Boilerplate module
+# RecMath
 
-> Boilerplate for a JavaScript module (browser + node).
+> Recreational mathemetics including games and puzzle solvers.
 
 ## Getting Started: in a web page
 
@@ -10,14 +10,14 @@ in `rollup.config.js` and run `npm run build` to change this).
 Load the script from the CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/boilerplate-module@1"></script>
+<script src="https://cdn.jsdelivr.net/npm/rec-math@1"></script>
 ```
 
-The module is exported as `BoilerplateModule`:
+The module is exported as `RecMath`:
 
 ```html
 <script>
-  document.write(BoilerplateModule.version);
+  document.write(RecMath.version);
 </script>
 ```
 
@@ -28,30 +28,39 @@ Node >= 12 is currently supported in the distributed modules.
 Install from `npm`:
 
 ```console
-$ npm i boilerplate-module
+$ npm i rec-math
 ```
 
 Require CommonJS module:
 
 ```js
 // Default should work...
-const BoilerplateModule = require('boilerplate-module');
+const RecMath = require('rec-math');
 // ...or specify CommonJS module.
-const BoilerplateModule = require('boilerplate-module/dist/cjs');
+const RecMath = require('rec-math/dist/cjs');
 ```
 
 or import as an ES6 module:
 
 ```js
 // Default should work...
-import BoilerplateModule from 'boilerplate-module';
+import RecMath from 'rec-math';
 // ...or specify ES6 module.
-import BoilerplateModule from 'boilerplate-module/dist/esm';
+import RecMath from 'rec-math/dist/esm';
 ```
 
-### Using
-
 ## Documentation
+
+## Development
+
+```console
+$ # Run unit tests.
+$ npm run test:unit
+$
+$ # Build and run all tests.
+$ npm run build
+$ npm run test
+```
 
 ## Contributing
 
