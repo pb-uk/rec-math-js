@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mastermind solver</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="../../../dist/games/mastermind.min.js"></script>
+
+    <div id="app"></div>
+
+    <script type="text/x-template" id="tpl-tree">
+      <pre>{{ stats }}</pre>
+      <tree-node isRoot="1" :node="tree"/>
+    </script>
+
+    <script type="text/x-template" id="tpl-node">
+      <div style="padding: 0 0 0 1em;">
+        <div v-if="isRoot">
+          First guess {{ node.guess }}
+        </div>
+        <div v-else>
+          <div v-if="node.isSolution">
+            Mark {{ mark }} => secret is {{ node.guess }}
+          </div>
+          <div v-else>
+            Mark {{ mark }} => guess {{ node.guess }}
+          </div>
+        </div>
+
+        <div>
+          <div v-if="node.marks">
+            <div v-for="key in Object.keys(node.marks)" :key="key">
+              <tree-node :mark="key" :node="node.marks[key]"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script>
+      const { solverFactory } = Mastermind;
+      const game = solverFactory({
+        length: 3,
+        radix: 2,
+        strategy: 'knuth',
+        /* strategy: 'knuth', */
+      }).buildSolutionTree();
+
+      const TreeRoot = {
+        data() {
+          return {
+            tree: game.tree,
+            stats: game.getStats(),
+          };
+        },
+        template: '#tpl-tree',
+      };
+
+      const TreeNode = {
+        props: ['mark', 'node', 'isRoot'],
+        template: '#tpl-node',
+      };
+
+      const app = Vue.createApp(TreeRoot);
+
+      app.component('TreeNode', TreeNode);
+      app.mount('#app');
+    </script>
+  </body>
+</html>

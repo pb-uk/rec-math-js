@@ -46,9 +46,7 @@ const main = {
 };
 
 // Modules to build.
-const modules = [
-  // ['games/', 'mastermind', 'index.js']
-];
+const modules = [['games/', 'mastermind', 'index.js']];
 
 // Sub-module banner.
 const getBanner = ({ file, name }) => `/*! ${pkgName}/${file} v${
