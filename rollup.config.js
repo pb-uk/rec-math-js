@@ -5,6 +5,7 @@ import camelCase from 'camelcase';
 import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser';
+import typescript from '@rollup/plugin-typescript';
 
 // Uncomment commonjs and/or resolve here and in plugins if required.
 // import commonjs from '@rollup/plugin-commonjs';
@@ -39,14 +40,14 @@ const banner = `/*! ${pkgName} v${pkg.version} ${datetime}
 
 // Configure main build.
 const main = {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   file: 'index',
   name: camelCase(pkgName, { pascalCase: true }),
   banner,
 };
 
 // Modules to build.
-const modules = [['games/', 'mastermind', 'index.js']];
+const modules = [['games/', 'mastermind', 'index.ts']];
 
 // Sub-module banner.
 const getBanner = ({ file, name }) => `/*! ${pkgName}/${file} v${
@@ -62,6 +63,7 @@ const plugins = [
   // resolve(), // so Rollup can find CommonJS modules.
   // commonjs(), // so Rollup can convert CommonJS to ES modules.
   json(),
+  typescript(),
 ];
 
 const getBrowserConfig = ({ input, file, name, banner }) => ({

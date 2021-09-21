@@ -11,7 +11,7 @@ const strategies = {
 
 export { version };
 
-export function solverFactory(options = {}) {
+export function solverFactory(options: { strategy?: string } = {}) {
   const solver = new Solver(options);
 
   let { strategy } = options;
