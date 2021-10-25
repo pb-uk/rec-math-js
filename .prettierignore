@@ -5,3 +5,4 @@
 
 # Test reports.
 /coverage/
+.nyc_output

@@ -9,10 +9,10 @@ name: Build
 
 on:
   push:
-    branches: [main, develop]
+    branches: []
     # Or use branches-ignore.
   pull_request:
-    branches: [main, develop]
+    branches: []
     # Or use branches-ignore.
 
 jobs:

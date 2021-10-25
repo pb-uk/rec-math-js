@@ -6,17 +6,21 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'eslint:recommended',
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 13,
     sourceType: 'module',
   },
+  plugins: ['@typescript-eslint'],
   rules: {},
   overrides: [
     {
-      files: ['**/*.{test,spec}.js'],
-      env: { jest: true },
-      extends: ['plugin:jest/recommended'],
+      files: ['**/*.{spec,test}.{j,t}s'],
+      env: { mocha: true },
+      extends: ['plugin:mocha/recommended'],
+      plugins: ['mocha'],
+      rules: {},
     },
   ],
 };
