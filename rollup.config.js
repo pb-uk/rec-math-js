@@ -1,10 +1,9 @@
 // rollup.config.js
-import { rmSync } from 'fs';
-
 import camelCase from 'camelcase';
-import babel from '@rollup/plugin-babel';
+// import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser';
+import typescript from '@rollup/plugin-typescript';
 
 // Uncomment commonjs and/or resolve here and in plugins if required.
 // import commonjs from '@rollup/plugin-commonjs';
@@ -13,17 +12,12 @@ import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 // Minimum node.js version for CommonJS build.
-const node = '12'; // Until EOL 2022-04-30
+// const node = '12'; // Until EOL 2022-04-30
 // const node = '14'; // Until EOL 2023-04-30
 // const node = '16'; // Until EOL 2024-04-30
 
 // Browserslist target for Browser and ES module build.
-const targets = '>0.25%, not dead, not IE 11, Firefox ESR';
-
-// Delete existing files.
-if (rmSync) {
-  rmSync('dist', { recursive: true, force: true });
-}
+// const targets = '>0.25%, not dead, not IE 11, Firefox ESR';
 
 // Human timestamp for banner.
 const datetime = new Date().toISOString().substring(0, 19).replace('T', ' ');
@@ -39,7 +33,7 @@ const banner = `/*! ${pkgName} v${pkg.version} ${datetime}
 
 // Configure main build.
 const main = {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   file: 'index',
   name: camelCase(pkgName, { pascalCase: true }),
   banner,
@@ -63,6 +57,9 @@ const getBanner = ({ file, name }) => `/*! ${pkgName}/${file} v${
 const plugins = [
   // resolve(), // so Rollup can find CommonJS modules.
   // commonjs(), // so Rollup can convert CommonJS to ES modules.
+  typescript({
+    module: 'esnext',
+  }),
   json(),
 ];
 
@@ -82,11 +79,13 @@ const getBrowserConfig = ({ input, file, name, banner }) => ({
   plugins: [
     ...plugins,
 
+    /*
     babel({
       babelHelpers: 'bundled',
       presets: [['@babel/preset-env', { targets }]],
       exclude: 'node_modules/**',
     }),
+    */
 
     terser(),
   ],
@@ -106,11 +105,13 @@ const getEsConfig = ({ input, file, name, banner }) => ({
   plugins: [
     ...plugins,
 
+    /*
     babel({
       babelHelpers: 'bundled',
       presets: [['@babel/preset-env', { targets }]],
       exclude: 'node_modules/**',
     }),
+    */
   ],
 });
 
@@ -129,11 +130,13 @@ const getCjsConfig = ({ input, file, name, banner }) => ({
   plugins: [
     ...plugins,
 
+    /*
     babel({
       babelHelpers: 'bundled',
       presets: [['@babel/preset-env', { targets: { node } }]],
       exclude: 'node_modules/**',
     }),
+    */
   ],
 });
 

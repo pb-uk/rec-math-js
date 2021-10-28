@@ -23,8 +23,12 @@ describe('Pseudo-random number generators', function () {
     });
 
     it('should throw if not passed a number', function () {
-      // @ts-expect-error Expects a number
+      // @ts-expect-error Expects a number.
       expect(() => constant('0.1')).to.throw(TypeError);
+      // @ts-expect-error Expects a number.
+      expect(() => constant(null)).to.throw(TypeError);
+      // x@ts-expect-error Expects a number.
+      expect(() => constant(Number.NaN)).to.throw(RangeError);
     });
 
     it('should throw if not passed a number between 0 and 1', function () {
