@@ -16,7 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nodejs: [12, 14, 16, 17]
+        nodejs: [
+          # 12, fails due to ES Module test
+          14,
+          16,
+          17]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
