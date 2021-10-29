@@ -97,7 +97,7 @@ const getEsConfig = ({ input, file, name, banner }) => ({
   output: [
     {
       banner: banner || getBanner({ file, name }),
-      file: `dist/esm/${file}.js`,
+      file: `esm/dist/${file}.js`,
       format: 'es',
       sourcemap: true,
     },

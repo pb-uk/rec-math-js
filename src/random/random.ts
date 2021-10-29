@@ -1,7 +1,7 @@
 // src/random/random.ts
 
-// xeslint-disable-next-line @typescript-eslint/no-explicit-any
-const checkValue = (value: number) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const checkValue = (value: any) => {
   if (typeof value !== 'number') {
     throw new TypeError('Random value must be a number');
   } else if (!(value >= 0 && value < 1)) {
