@@ -16,7 +16,7 @@ module.exports = {
   rules: {},
   overrides: [
     {
-      files: ['**/*.{spec,test}.{j,t}s'],
+      files: ['**/*.{spec,test}.{j,t,cj}s'],
       env: { mocha: true },
       extends: ['plugin:mocha/recommended'],
       plugins: ['mocha'],

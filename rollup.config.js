@@ -121,7 +121,7 @@ const getCjsConfig = ({ input, file, name, banner }) => ({
   output: [
     {
       banner: banner || getBanner({ file, name }),
-      file: `dist/cjs/${file}.js`,
+      file: `cjs/dist/${file}.js`,
       format: 'cjs',
       sourcemap: true,
       esModule: false,

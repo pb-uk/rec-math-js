@@ -32,7 +32,7 @@ describe('Pseudo-random number generators', function () {
     });
 
     it('should throw if not passed a number between 0 and 1', function () {
-      expect(() => constant(-0.1)).to.throw(RangeError);
+      expect(() => constant(-Number.EPSILON)).to.throw(RangeError);
       expect(() => constant(0)).not.to.throw();
       expect(() => constant(1)).to.throw(RangeError);
     });

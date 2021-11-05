@@ -18,7 +18,7 @@
   },
   "author": "pbuk (http://github.com/pbuk-uk)",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
+  "main": "cjs/dist/index.js",
   "module": "esm/dist/index.js",
   "browser": "dist/rec-math.min.js",
   "directories": {
@@ -26,19 +26,21 @@
   },
   "files": [
     "dist",
+    "cjs",
     "esm"
   ],
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npm run build:dist && npm run build:types",
-    "build:dist": "rimraf dist && rimraf esm/dist && rollup -c rollup.config.js",
+    "build": "npm run build:clean && npm run build:dist && npm run build:types",
+    "build:clean": "rimraf dist && rimraf esm/dist && rimraf esm/dist",
+    "build:dist": "rollup -c rollup.config.js",
     "build:types": "tsc --project tsconfig.types.json",
     "ci": "npm run lint:check && npm run test:unit && npm run build && npm run test:dist",
     "lint:check": "prettier --check . && eslint .",
     "lint:fix": "prettier --write . && eslint --fix .",
-    "test:dist": "mocha ./test/dist/**/*.{spec,test}.js",
+    "test:build": "mocha ./test/build/**/*.{spec,test}.{j,cj,mj,t}s",
     "test:report": "rimraf coverage && nyc --include=src npm run test:unit && nyc report --reporter=html --reporter=text-summary",
-    "test:unit": "mocha -r ts-node/register ./test/unit/**/*.{spec,test}.ts"
+    "test:unit": "mocha -r ts-node/register ./test/unit/**/*.{spec,test}.{j,cj,mj,t}s"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",

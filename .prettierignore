@@ -2,6 +2,8 @@
 
 # Distribution files.
 dist/
+cjs/dist/
+esm/dist/
 
 # Test reports.
 /coverage/
