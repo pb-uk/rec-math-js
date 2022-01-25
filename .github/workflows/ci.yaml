@@ -5,11 +5,11 @@
 # windows.
 # https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Build
+name: Build and test
 
 on:
   push:
-    branches: [main, develop]
+    branches: []
     # Or use branches-ignore.
   pull_request:
     branches: [main, develop]
@@ -24,10 +24,11 @@ jobs:
         runs-on: [ubuntu-latest, macos-latest, windows-latest]
         node-version:
           # See https://nodejs.org/en/about/releases/.
-          - 12.x # Until 2022-04-30
+          # 12 fails due to ES Module test
+          # - 12.x # Until 2022-04-30
           - 14.x # Until 2023-04-30
           - 16.x # Until 2024-04-30
-          # - 17.x # From 2021-10-19
+          - 17.x # From 2021-10-19
           # - 18.x # From 2022-04-19
 
     steps:

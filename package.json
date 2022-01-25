@@ -1,6 +1,6 @@
 {
   "name": "@pbuk/rec-math",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Recreational mathemetics including games and puzzle solvers",
   "keywords": [
     "recreational",
@@ -18,34 +18,48 @@
   },
   "author": "pbuk (http://github.com/pbuk-uk)",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "cjs/dist/index.js",
+  "module": "esm/dist/index.js",
   "browser": "dist/rec-math.min.js",
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "dist",
+    "cjs",
+    "esm"
+  ],
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint:fix && npm run build:build",
-    "build:build": "rollup -c",
-    "ci": "npm run lint && npm run build:build && npm run test:ci",
-    "lint": "eslint . && prettier . --check",
-    "lint:fix": "eslint . --fix && prettier . --write",
-    "publish": "npm run build && npm run test && npm publish --access=public",
-    "test": "jest test --verbose",
-    "test:ci": "npm run test",
-    "test:coverage": "jest test/unit --coverage",
-    "test:func": "jest test/functional --verbose",
-    "test:unit": "jest test/unit --verbose"
+    "build": "npm run build:clean && npm run build:dist && npm run build:types",
+    "build:clean": "rimraf dist && rimraf esm/dist && rimraf esm/dist",
+    "build:dist": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
+    "ci": "npm run lint:check && npm run test:unit && npm run build && npm run test:build",
+    "lint:check": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint --fix .",
+    "test:build": "mocha ./test/build/**/*.{spec,test}.{j,cj,mj,t}s",
+    "test:report": "rimraf coverage && nyc --include=src npm run test:unit && nyc report --reporter=html --reporter=text-summary",
+    "test:unit": "mocha -r ts-node/register ./test/unit/**/*.{spec,test}.{j,cj,mj,t}s"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.6",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "eslint": "^7.32.0",
-    "eslint-plugin-jest": "^24.4.0",
-    "jest": "^27.2.0",
-    "prettier": "^2.4.0",
-    "rollup": "^2.56.3",
-    "rollup-plugin-terser": "^7.0.2"
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "camelcase": "^6.2.0",
+    "chai": "^4.3.4",
+    "eslint": "^8.1.0",
+    "eslint-plugin-mocha": "^9.0.0",
+    "mocha": "^9.1.3",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.58.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }

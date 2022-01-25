@@ -1,4 +1,4 @@
 # .gitattributes
 
-# Fix line endings on Windows for consistent Prettier checking.
-* text=auto eol=lf
+# Do not convert line endings to CRLF on Windows otherwise prettier will fail.
+* -text
