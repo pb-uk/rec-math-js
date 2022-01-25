@@ -1,35 +1,41 @@
-# .github/workflows/ci.yaml
+# .github/workflows/node.js.yaml
 
-name: CI Test
+# This workflow will do a clean install of node dependencies, build the source
+# code and run tests across different versions of node on ubuntu, macos and
+# windows.
+# https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build and test
 
 on:
   push:
-    # branches: [main, develop]
-    branches-ignore: []
+    branches: []
+    # Or use branches-ignore.
   pull_request:
     branches: [main, develop]
-    # branches-ignore: []
+    # Or use branches-ignore.
 
 jobs:
-  test:
-    name: Node.js v${{ matrix.nodejs }}
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.runs-on }}
+
     strategy:
       matrix:
-        nodejs: [
-            # 12, fails due to ES Module test
-            14,
-            16,
-            17,
-          ]
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        node-version:
+          # See https://nodejs.org/en/about/releases/.
+          # 12 fails due to ES Module test
+          # - 12.x # Until 2022-04-30
+          - 14.x # Until 2023-04-30
+          - 16.x # Until 2024-04-30
+          - 17.x # From 2021-10-19
+          # - 18.x # From 2022-04-19
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.runs-on }}
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.nodejs }}
-
-      - name: Install
-        run: npm install
-
-      - name: Build and test
-        run: npm run ci
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run ci
