@@ -1,0 +1,35 @@
+# .github/workflows/ci.yaml
+
+name: CI Test
+
+on:
+  push:
+    # branches: [main, develop]
+    branches-ignore: []
+  pull_request:
+    branches: [main, develop]
+    # branches-ignore: []
+
+jobs:
+  test:
+    name: Node.js v${{ matrix.nodejs }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nodejs: [
+            # 12, fails due to ES Module test
+            14,
+            16,
+            17,
+          ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.nodejs }}
+
+      - name: Install
+        run: npm install
+
+      - name: Build and test
+        run: npm run ci

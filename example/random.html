@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <!-- Codemirror CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.63.3/lib/codemirror.css"
+      integrity="sha256-utW7LD90DZW8tsURpPq7cabUGkha4Bf++sK4e7NC0+8="
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/codemirror@5.63.3/lib/codemirror.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/codemirror@5.63.3/mode/javascript/javascript.js"
+    ></script>
+
+    <script async src="https://unpkg.com/vue@3.2.20"></script>
+
+    <script async src="../dist/rec-math.min.js"></script>
+
+    <title>RecMath random examples</title>
+    <style>
+      .CodeMirror {
+        height: auto;
+        border: 1px solid #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container-fluid">
+        <h1 class="display-4">RecMath random examples</h1>
+
+        <div class="card">
+          <h2 class="card-header h6">Dice</h2>
+
+          <!-- Roll a default d6 -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// Roll a default six-sided die.
+const { roll } = RecMath.dice;
+roll();</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- Roll d2 -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// Can roll a d2 (also known as a coin!).
+const { roll } = RecMath.dice;
+roll(2);</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- Roll 3d8+1 -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// Create a roller for 3d8+1.
+const { create } = RecMath.dice;
+const roll = create({
+  number: 3, // Number of dice (default 1).
+  sides: 8, // Sides per die (default 6).
+  plus: 1, // Constand to add (default 0).
+});
+
+const { value, values } = roll();
+`${value} (${values.join()})`</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- Roll middle 3 of 5d6 -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// Create a roller for the middle 3 of 5d6.
+const { create } = RecMath.dice;
+const roll = create({
+  number: 5, // Number of dice (default 1).
+  ignoreTop: 1, // Ignore top n.
+  top: 3,  // Take top n (after ignoring any).
+});
+
+const { value, values } = roll();
+`${value} (${values.join()})`</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- Advanced options -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// You can provide your own pseudo-random number generator.
+const { create } = RecMath.dice;
+const roll = create({
+  random: () => 0.5 * Math.random(),
+});
+
+const { value, values } = roll();
+`${value} (${values.join()})`</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- Advanced options -->
+          <div class="card-body">
+            <editable-code>
+              <textarea>
+// You can create an iterator instead.
+const { createIterator } = RecMath.dice;
+const iterator = createIterator({
+  // Optional length, otherwise will never return done.
+  iteratorLength: 6,
+  number: 3,
+});
+// This example creates 6 rolls of 3d6.
+Array.from(iterator).map(({value}) => value).join();
+</textarea
+              >
+            </editable-code>
+          </div>
+
+          <!-- End of section -->
+        </div>
+      </div>
+
+      <footer class="container-fluid text-center border-top text-muted mt-2">
+        <small> RecMath {{ version }} </small>
+      </footer>
+    </div>
+
+    <!-- The Vue template for the editable code component -->
+    <script type="text/x-template" id="editable-code-template">
+      <div ref="wrapperRef">
+        <slot></slot>
+        <div class="d-flex mt-2">
+          <div class="me-4">
+            <button class="btn btn-primary btn-sm" @click="run">Run</button>
+          </div>
+          <div>
+            <div class="alert alert-danger" v-if="err">{{ err }}</div>
+            <span v-if="results.length">Results: {{ results.join('; ') }}</span>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script>
+      window.onload = () => {
+        const { createApp, onMounted, ref } = Vue;
+
+        createApp({
+          setup() {
+            return {
+              version: RecMath.version,
+            };
+          },
+        })
+          .component('EditableCode', {
+            template: '#editable-code-template',
+            setup() {
+              const wrapperRef = ref(null);
+
+              let editor;
+              onMounted(() => {
+                const el = wrapperRef.value.querySelector(`textarea`);
+                // Codemirror
+                editor = CodeMirror.fromTextArea(el, {
+                  mode: 'javascript',
+                  lineNumbers: true,
+                });
+              });
+              const results = ref([]);
+              const err = ref(null);
+              const run = (ev) => {
+                ev.target.blur();
+                try {
+                  const code = editor.getValue();
+                  results.value.push(eval(code));
+                  err.value = null;
+                } catch (e) {
+                  err.value = e;
+                }
+              };
+
+              return {
+                run,
+                results,
+                err,
+                wrapperRef,
+              };
+            },
+          })
+          .mount('#app');
+      };
+    </script>
+  </body>
+</html>

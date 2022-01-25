@@ -1,7 +1,9 @@
 # .eslintignore
 
 # Distribution files.
-/dist/
+dist/
+cjs/dist/
+esm/dist/
 
 # Test reports.
 /coverage/
